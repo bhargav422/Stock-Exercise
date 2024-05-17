@@ -1,11 +1,20 @@
-from empyrial import empyrial, Engine
+from flask import Flask, render_template, redirect, request, url_for
 
 
-portfolio = Engine(    
-                  start_date= "2022-01-01", #start date for the backtesting
-                  portfolio= ["IRCTC.NS", "RELIANCE.NS", "INFY.NS", "HDFCBANK.NS"], #assets in your portfolio 
-                  weights = [0.2, 0.2, 0.2, 0.2], #equal weighting is set by default
-                  benchmark = ["^NSEI"] #NIFTY50 is set by default
-)
+app = Flask(__name__)
 
-empyrial(portfolio)
+
+@app.route('/')
+def homepage():
+    return render_template('homepage.html')
+
+@app.route('/Stocks', methods = ["POST", "GET"])
+def stocks():
+    """
+
+    Create a dashbar with a list of stocks
+    """
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
