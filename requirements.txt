@@ -1,1 +1,6 @@
 flask
+dash
+pandas
+yfinance
+requests
+gunicorn
