@@ -4,18 +4,22 @@
         <title>My Home</title>
         <style>
             body{
-                background-image: url('static/images/stock_copyright.jpg');
+                background-image: url('static/images/cover.jpg');
                 background-size: cover;
                 background-repeat: no-repeat;
             }
-            h1{color: white}
-            p1{color: wheat;}
+            h1{ text-align: center;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                color: rgb(255, 255, 255)}
+            p1{color: rgb(179, 245, 226);}
         </style>
     </head>
     <body>
         <!-- Enable the contents -->
         <h1> Welcome to your Home </h1>
         <p1> This is where you find your interests </p1>
-        <button type="button">Explore Now!</button>
+        <button onclick="window.location.href='/go-to-dash';"> Goto Dashboard</button>
     </body>
 </html>
