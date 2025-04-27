@@ -1,5 +1,6 @@
 from flask import Flask, render_template, redirect, request, url_for
 from source import stocks_list
+from source import get_stocks
 
 app = Flask(__name__)
 
@@ -8,15 +9,22 @@ app = Flask(__name__)
 def homepage():
     return render_template('homepage.html')
 
-@app.route('/go-to-dash')
-def stocks():
+@app.route('/check_stocks')
+def check_stocks():
+
+    return redirect('/dash')
+dash_app = stocks_list.create_dash_app(app)
+
+@app.route('/watchlist')
+def watchlist():
     """
 
     Create a dashbar with a list of stocks
     """
-    return redirect('/dash')
+    stock_data = get_stocks.StockData(app)
+    stock_data.create_watchlist()
+    return redirect('/my_stocks')
 
-dash_app = stocks_list.create_dash_app(app)
 
 if __name__ == "__main__":
     app.run(debug=True)

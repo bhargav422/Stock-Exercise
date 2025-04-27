@@ -1,10 +1,8 @@
 from dash import Dash, html, dcc
 from dash.dependencies import Input, Output, State
-import plotly.express as px
 import yfinance as yf
 import datetime
 import plotly.graph_objects as go
-import os
 from flask import send_from_directory
 
 def create_dash_app(flask_app):
@@ -12,17 +10,11 @@ def create_dash_app(flask_app):
 
     dash_app.layout = html.Div([
         html.H1('Real-Time Indian Stock Data'),
-        html.Link(rel='stylesheet', href='./templates/dashboard_style.css'),
         dcc.Input(id='stock-symbol', type='text', placeholder='Enter stock symbol (e.g., RELIANCE.NS)', value='RELIANCE.NS'),
         html.Button('Fetch Data', id='fetch-button', n_clicks=0),
         html.Div(id='stock-data'),
         html.Div(id='output-graph')
     ])
-
-    # Serve CSS file from a different directory
-    @flask_app.route('/static/css/<path:path>')
-    def serve_css(path):
-        return send_from_directory(os.path.join(os.getcwd(), 'static', 'css'), path)
 
     # Callback to fetch stock data upon button click
     @dash_app.callback(
