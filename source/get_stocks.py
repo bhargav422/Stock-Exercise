@@ -1,12 +1,12 @@
 import dash
 from dash import dcc, html
-from dash.dependencies import Input, Output, State
-import yfinance as yf
+from dash.dependencies import Input, Output
+from flask import send_from_directory
 
 
 class StockData:
     def __init__(self, flask_base):
-        self.app = dash.Dash(__name__, server=flask_base, url_base_pathname='/my_stocks/')
+        self.app = dash.Dash(__name__,server=flask_base, url_base_pathname='/my_stocks/')
         self.stocks = {}
         self.stock_data = {}
         self.app.title = "Stock Watchlist"
@@ -24,33 +24,25 @@ class StockData:
             Output('watchlist', 'children'),
             Output('stock-graph', 'figure'),
             Input('add-button', 'n_clicks'),
-            State('stock-symbol', 'value')
+            Input('stock-symbol', 'value')
         )
         def update_watchlist(n_clicks, symbol):
-            symbol = self.normalize_symbol(symbol)
             if n_clicks > 0 and symbol:
                 self.stocks[symbol] = symbol
                 self.stock_data[symbol] = self.get_stock_data(symbol)
                 return self.create_watchlist_display(), self.create_graph(symbol)
             return self.create_watchlist_display(), {}
         return self.app.server
-
-    def normalize_symbol(self, symbol):
-        return symbol.strip().upper() if symbol else ''
-
     def create_watchlist_display(self):
         if not self.stocks:
             return "No stocks in watchlist."
         return html.Ul([html.Li(stock) for stock in self.stocks.keys()])
-
     def create_graph(self, symbol): 
         if symbol in self.stock_data:
             data = self.stock_data[symbol]
-            if data.empty or 'Close' not in data:
-                return {}
             figure = {
                 'data': [
-                    {'x': data.index, 'y': data['Close'], 'type': 'line', 'name': symbol}
+                    {'x': data['Date'], 'y': data['Close'], 'type': 'line', 'name': symbol}
                 ],
                 'layout': {
                     'title': f"{symbol} Stock Price Over Time"
@@ -58,11 +50,13 @@ class StockData:
             }
             return figure
         return {}
-
     def get_stock_data(self, symbol):
-        if symbol not in self.stock_data:
-            self.stock_data[symbol] = yf.Ticker(symbol).history(period="1y")
-        return self.stock_data[symbol]
+        # Simulate fetching stock data
+        import pandas as pd
+        import numpy as np
+        dates = pd.date_range(start='2023-01-01', periods=100)
+        prices = np.random.rand(100) * 1000
+        return pd.DataFrame({'Date': dates, 'Close': prices})
 
 
 if __name__ == "__main__":

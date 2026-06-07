@@ -14,7 +14,9 @@ def homepage():
 
 @app.route('/check_stocks')
 def check_stocks():
-    return redirect('/dash/')
+
+    return redirect('/dash')
+dash_app = stocks_list.create_dash_app(app)
 
 @app.route('/watchlist')
 def watchlist():
@@ -22,7 +24,9 @@ def watchlist():
 
     Create a dashbar with a list of stocks
     """
-    return redirect('/my_stocks/')
+    stock_data = get_stocks.StockData(app)
+    stock_data.create_watchlist()
+    return redirect('/my_stocks')
 
 
 if __name__ == "__main__":
