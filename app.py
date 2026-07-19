@@ -16,7 +16,6 @@ def homepage():
 def check_stocks():
 
     return redirect('/dash')
-dash_app = stocks_list.create_dash_app(app)
 
 @app.route('/watchlist')
 def watchlist():
@@ -30,4 +29,4 @@ def watchlist():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=5001)
